@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mowing Game</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background: #1d1f1b;
+        color: #eaeadb;
+        font-family: system-ui, sans-serif;
+        overflow: hidden;
+      }
+      #app {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        gap: 12px;
+      }
+      #hud {
+        font-size: 14px;
+        opacity: 0.8;
+        letter-spacing: 0.05em;
+      }
+      #game {
+        image-rendering: pixelated;
+        background: #2a2f27;
+        border-radius: 4px;
+        box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div id="hud">WASD / Arrow keys to drive &middot; Shift to sprint</div>
+      <canvas id="game" width="800" height="600"></canvas>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
