@@ -25,9 +25,21 @@ export class Mower {
 
   update(input: InputState, dt: number, bounds: LawnRect): void {
     const maxFwd = MAX_FORWARD_SPEED * (input.sprint ? SPRINT_MULTIPLIER : 1);
-    const targetSpeed =
-      input.throttle > 0 ? maxFwd * input.throttle :
-      input.throttle < 0 ? MAX_REVERSE_SPEED * input.throttle : 0;
+
+    let targetSpeed: number;
+    let turnInput: number;
+
+    if (input.aim) {
+      const diff = wrapAngle(input.aim.angle - this.heading);
+      turnInput = Math.max(-1, Math.min(1, diff / 0.4));
+      const alignment = Math.max(0, Math.cos(diff));
+      targetSpeed = maxFwd * input.aim.magnitude * alignment;
+    } else {
+      turnInput = input.turn;
+      targetSpeed =
+        input.throttle > 0 ? maxFwd * input.throttle :
+        input.throttle < 0 ? MAX_REVERSE_SPEED * input.throttle : 0;
+    }
 
     const delta = targetSpeed - this.speed;
     const rate = Math.sign(delta) === Math.sign(this.speed) || this.speed === 0 ? ACCEL : BRAKE;
@@ -36,7 +48,7 @@ export class Mower {
     const speedFrac = Math.abs(this.speed) / maxFwd;
     const turnScale = 1 - TURN_FALLOFF_AT_MAX * Math.min(1, speedFrac);
     const turnDir = this.speed >= 0 ? 1 : -1;
-    this.heading += input.turn * TURN_RATE * turnScale * turnDir * dt;
+    this.heading += turnInput * TURN_RATE * turnScale * turnDir * dt;
 
     this.x += Math.cos(this.heading) * this.speed * dt;
     this.y += Math.sin(this.heading) * this.speed * dt;
@@ -74,4 +86,10 @@ export class Mower {
 
     ctx.restore();
   }
+}
+
+function wrapAngle(a: number): number {
+  while (a > Math.PI) a -= Math.PI * 2;
+  while (a < -Math.PI) a += Math.PI * 2;
+  return a;
 }

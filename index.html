@@ -2,7 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <title>Mowing Game</title>
     <style>
       html, body {
@@ -20,24 +22,35 @@
         align-items: center;
         justify-content: center;
         height: 100%;
-        gap: 12px;
+        gap: 8px;
+        padding: 8px;
+        box-sizing: border-box;
       }
       #hud {
-        font-size: 14px;
-        opacity: 0.8;
-        letter-spacing: 0.05em;
+        font-size: 13px;
+        opacity: 0.75;
+        letter-spacing: 0.04em;
+        text-align: center;
       }
       #game {
-        image-rendering: pixelated;
         background: #2a2f27;
         border-radius: 4px;
         box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
+        width: min(100vw - 16px, calc((100vh - 60px) * 4 / 3));
+        height: auto;
+        aspect-ratio: 4 / 3;
+        touch-action: none;
+      }
+      @media (max-width: 600px) {
+        #hud { display: none; }
+        #app { padding: 0; gap: 0; }
+        #game { width: 100vw; height: 100vh; max-width: none; border-radius: 0; }
       }
     </style>
   </head>
   <body>
     <div id="app">
-      <div id="hud">WASD / Arrow keys to drive &middot; Shift to sprint</div>
+      <div id="hud">Drag anywhere to steer &middot; WASD / Arrows also work &middot; Shift to sprint</div>
       <canvas id="game" width="800" height="600"></canvas>
     </div>
     <script type="module" src="/src/main.ts"></script>
